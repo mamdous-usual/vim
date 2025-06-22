@@ -1,6 +1,6 @@
-# 📝 My Vim Configuration
+# 📝 Vim Configuration
 
-Welcome to my Vim configuration setup! This repo includes my customized `.vimrc` file and a useful cheatsheet for Vim commands.
+This repo includes my customized `.vimrc` file and a useful cheatsheet for Vim commands.
 
 ---
 
@@ -10,7 +10,7 @@ Welcome to my Vim configuration setup! This repo includes my customized `.vimrc`
   My personal Vim configuration file, featuring plugin management via `vim-plug`, UI tweaks, useful key mappings, and productivity-focused settings.
 
 - **`vim-commands.md`**  
-  A curated cheatsheet of essential Vim commands, motions, and shortcuts—perfect for beginners and as a quick reference.
+  A curated cheatsheet of essential Vim commands, motions, and shortcuts.
 
 ---
 
