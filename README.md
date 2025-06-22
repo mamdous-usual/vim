@@ -20,8 +20,23 @@ This configuration uses [`vim-plug`](https://github.com/junegunn/vim-plug) for m
 
 ### 🔧 Installation Steps
 
-1. **Install `vim-plug`** (if not already installed):
+1. **Install `vim-plug`:**
 
    ```bash
    curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+2. **Clone this repository:**
+```
+https://github.com/mamdous-usual/vim.git
+```
+
+3. **Copy the `.vimrc` file to your home directory:**
+```
+cp vim/.vimrc ~/.vimrc
+```
+
+4. **Open Vim and install the plugins:**
+```
+:PlugInstall
+```
