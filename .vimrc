@@ -26,7 +26,7 @@ let mapleader = " "
 
 " ===================== Shortcuts =====================
 
-" Terminal (Vim 8+)
+" Terminal
 nnoremap <leader>t :term<CR>
 nnoremap <leader>vt :vert term<CR>
 
