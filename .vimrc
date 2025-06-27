@@ -41,7 +41,7 @@ nnoremap <leader>j :w<CR>:!clear && javac % && java %:r<CR>
 
 call plug#begin('~/.vim/plugged')
 
-" Java LSP
+"  For autocomplete & Installing LSP
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Auto pairs
