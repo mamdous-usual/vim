@@ -26,7 +26,7 @@ let mapleader = " "
 
 " ===================== Shortcuts =====================
 
-" Terminal
+" Terminal 
 nnoremap <leader>t :term<CR>
 nnoremap <leader>vt :vert term<CR>
 
@@ -34,14 +34,29 @@ nnoremap <leader>vt :vert term<CR>
 nnoremap <leader>ya :%y+<CR>
 vnoremap <leader>y "+y
 
-" Java compile and run
-nnoremap <leader>j :w<CR>:!clear && javac % && java %:r<CR>
+" Universal compile & run (Java, C, C++, Python)
+function! CompileRun()
+  write
+  if &filetype == 'java'
+    execute "!clear && javac % && java %:r"
+  elseif &filetype == 'c'
+    execute "!clear && gcc % -o %:r && ./%:r"
+  elseif &filetype == 'cpp'
+    execute "!clear && g++ % -o %:r && ./%:r"
+  elseif &filetype == 'python'
+    execute "!clear && python3 %"
+  else
+    echo "No compile rule for this filetype!"
+  endif
+endfunction
+
+nnoremap <leader>r :call CompileRun()<CR>
 
 " ===================== Plugin Setup =====================
 
 call plug#begin('~/.vim/plugged')
 
-"  For autocomplete & Installing LSP
+" For autocomplete and installing LSP
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Auto pairs
@@ -78,4 +93,5 @@ function! CheckBackspace() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
-" ==================== End ==================== 
+
+" ==================== End ====================
