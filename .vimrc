@@ -13,7 +13,7 @@ set t_Co=256
 set wildmenu
 set encoding=utf-8
 
-" Enable true color support (for Gruvbox and airline)
+" Enable true color support
 if has("termguicolors")
   set termguicolors
 endif
@@ -66,19 +66,18 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
-" Gruvbox theme
-Plug 'morhetz/gruvbox'
+" (Removed Gruvbox theme since we're using built-in habamax)
 
 call plug#end()
 
 " ===================== Theme =====================
 
 set background=dark
-colorscheme gruvbox
+colorscheme habamax
 
 " ===================== Airline Configuration =====================
 
-let g:airline_theme='gruvbox'
+let g:airline_theme='minimalist'
 let g:airline#extensions#tabline#enabled = 1
 
 " ===================== coc.nvim Configuration =====================
@@ -94,4 +93,3 @@ function! CheckBackspace() abort
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-" ==================== End ====================
