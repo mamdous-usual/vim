@@ -66,18 +66,19 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
-" (Removed Gruvbox theme since we're using built-in habamax)
+" Theme: One Dark
+Plug 'joshdick/onedark.vim'
 
 call plug#end()
 
 " ===================== Theme =====================
 
 set background=dark
-colorscheme habamax
+colorscheme onedark
 
 " ===================== Airline Configuration =====================
 
-let g:airline_theme='minimalist'
+let g:airline_theme='onedark'
 let g:airline#extensions#tabline#enabled = 1
 
 " ===================== coc.nvim Configuration =====================
