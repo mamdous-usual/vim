@@ -18,14 +18,10 @@ if has("termguicolors")
   set termguicolors
 endif
 
-" Prevent auto-inserting comments on new lines
-autocmd BufNewFile,BufRead * setlocal formatoptions-=cro
-
 " Set leader key
 let mapleader = " "
 
 " ===================== Shortcuts =====================
-
 " Terminal 
 nnoremap <leader>t :term<CR>
 nnoremap <leader>vt :vert term<CR>
@@ -49,11 +45,9 @@ function! CompileRun()
     echo "No compile rule for this filetype!"
   endif
 endfunction
-
 nnoremap <leader>r :call CompileRun()<CR>
 
 " ===================== Plugin Setup =====================
-
 call plug#begin('~/.vim/plugged')
 
 " For autocomplete and installing LSP
@@ -72,16 +66,16 @@ Plug 'joshdick/onedark.vim'
 call plug#end()
 
 " ===================== Theme =====================
-
 set background=dark
 colorscheme onedark
 
 " ===================== Airline Configuration =====================
-
 let g:airline_theme='onedark'
 let g:airline#extensions#tabline#enabled = 1
 
 " ===================== coc.nvim Configuration =====================
+" Use <Enter> for completion
+inoremap <expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
 
 " Use <Tab> for completion and navigation
 inoremap <silent><expr> <TAB>
@@ -94,3 +88,12 @@ function! CheckBackspace() abort
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
+" ===================== Prevent auto-commenting ====================
+set formatoptions-=cro
+autocmd FileType * setlocal formatoptions-=cro
+autocmd BufEnter * setlocal formatoptions-=cro
+
+augroup FormatOptions
+    autocmd!
+    autocmd BufEnter * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+augroup END
