@@ -49,6 +49,7 @@
 - `J` - deletes an empty line (without going insert mode)
 - `P` - inserts an empty line (without going insert mode)
 - `ci)` / `]` / `}` - change inner parenthesis/brackets
+- `di)` / `]` / `}` - delete inner parenthesis/brackets
 - `%` - jump to the parenthesis/brackets
 - `^` - Jump to the first of the line
 - `gg` - jump to the beginning of the line
