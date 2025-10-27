@@ -12,24 +12,19 @@ set hlsearch
 set t_Co=256
 set wildmenu
 set encoding=utf-8
-
 " Enable true color support
 if has("termguicolors")
   set termguicolors
 endif
-
 " Set leader key
 let mapleader = " "
-
 " ===================== Shortcuts =====================
 " Terminal 
 nnoremap <leader>t :term<CR>
 nnoremap <leader>vt :vert term<CR>
-
 " Copy whole file to clipboard
 nnoremap <leader>ya :%y+<CR>
 vnoremap <leader>y "+y
-
 " Universal compile & run (Java, C, C++, Python)
 function! CompileRun()
   write
@@ -46,53 +41,40 @@ function! CompileRun()
   endif
 endfunction
 nnoremap <leader>r :call CompileRun()<CR>
-
 " ===================== Plugin Setup =====================
 call plug#begin('~/.vim/plugged')
-
 " For autocomplete and installing LSP
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
 " Auto pairs
 Plug 'jiangmiao/auto-pairs'
-
 " Airline statusline
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-
-" Theme: One Dark
-Plug 'joshdick/onedark.vim'
-
+" Theme: Tokyo Night
+Plug 'ghifarit53/tokyonight-vim'
 call plug#end()
-
 " ===================== Theme =====================
 set background=dark
-colorscheme onedark
-
+colorscheme tokyonight
 " ===================== Airline Configuration =====================
-let g:airline_theme='onedark'
+let g:airline_theme='night_owl'
 let g:airline#extensions#tabline#enabled = 1
-
 " ===================== coc.nvim Configuration =====================
 " Use <Enter> for completion
 inoremap <expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
-
 " Use <Tab> for completion and navigation
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
       \ CheckBackspace() ? "\<TAB>" :
       \ coc#refresh()
-
 function! CheckBackspace() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
-
 " ===================== Prevent auto-commenting ====================
 set formatoptions-=cro
 autocmd FileType * setlocal formatoptions-=cro
 autocmd BufEnter * setlocal formatoptions-=cro
-
 augroup FormatOptions
     autocmd!
     autocmd BufEnter * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
