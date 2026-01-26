@@ -1,34 +1,37 @@
-" ===================== Basic settings =====================
+" ===================== Basic Settings =====================
 syntax on
-set clipboard+=unnamedplus
+set clipboard=unnamedplus
 set number relativenumber
 set tabstop=4 shiftwidth=4 expandtab
 set splitright splitbelow
 set lazyredraw
 set updatetime=300
-set signcolumn=yes
+set signcolumn=no
 set background=dark
 set hlsearch
+set incsearch
 set t_Co=256
 set wildmenu
 set encoding=utf-8
+set mouse=a
+set hidden
 
-" Minimal UI enhancements
-set noshowmode              " Don't show mode in command line (airline shows it)
-set nocursorline            " Disable cursor line for minimal look
-set fillchars=vert:│,fold:─,diff:─  " Clean window separators
-set showtabline=2           " Always show tabline
-set laststatus=2            " Always show statusline
-set cmdheight=1             " Single line for command area
-set shortmess+=c            " Don't show completion messages
-set pumheight=10            " Limit popup menu height
+" Minimal UI
+set noshowmode
+set nocursorline
+set fillchars=vert:\ ,fold:\ ,diff:\ 
+set showtabline=0
+set laststatus=2
+set cmdheight=1
+set shortmess+=c
+set pumheight=10
 
-" Enable true color support
+" True color support
 if has("termguicolors")
   set termguicolors
 endif
 
-" Set leader key
+" Leader key
 let mapleader = " "
 
 " ===================== Shortcuts =====================
@@ -36,163 +39,136 @@ let mapleader = " "
 nnoremap <leader>t :term<CR>
 nnoremap <leader>vt :vert term<CR>
 
-" Copy whole file to clipboard
+" Copy operations
 nnoremap <leader>ya :%y+<CR>
 vnoremap <leader>y "+y
 
-" Universal compile & run (Java, C, C++, Python)
+" Quick save
+nnoremap <leader>w :w<CR>
+
+" Clear search highlighting
+nnoremap <leader><space> :nohlsearch<CR>
+
+" Compile & run for Java CP
 function! CompileRun()
   write
-  if &filetype == 'java'
-    execute "!clear && javac % && java %:r"
-  elseif &filetype == 'c'
-    execute "!clear && gcc % -o %:r && ./%:r"
-  elseif &filetype == 'cpp'
-    execute "!clear && g++ % -o %:r && ./%:r"
-  elseif &filetype == 'python'
-    execute "!clear && python3 %"
+  let l:classname = expand('%:t:r')
+  execute "!clear && javac % && java " . l:classname
+endfunction
+
+" Compile & run with input file
+function! CompileRunWithInput()
+  write
+  let l:classname = expand('%:t:r')
+  let l:input_file = input("Input file: ")
+  if l:input_file != ''
+    execute "!clear && javac % && java " . l:classname . " < " . l:input_file
   else
-    echo "No compile rule for this filetype!"
+    execute "!clear && javac % && java " . l:classname
   endif
 endfunction
+
 nnoremap <leader>r :call CompileRun()<CR>
+nnoremap <leader>ri :call CompileRunWithInput()<CR>
 
 " ===================== Plugin Setup =====================
 call plug#begin('~/.vim/plugged')
 
-" For autocomplete and installing LSP
+" Autocomplete and LSP
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Auto pairs
 Plug 'jiangmiao/auto-pairs'
 
-" Airline statusline
+" Statusline
 Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
 
-" Theme: Tokyo Night
-Plug 'ghifarit53/tokyonight-vim'
+" Theme: OneDark
+Plug 'joshdick/onedark.vim'
 
-" File explorer (optional but recommended for minimal workflow)
+" File explorer
 Plug 'preservim/nerdtree'
 
-" Icons for a polished look (optional - requires nerd font)
-Plug 'ryanoasis/vim-devicons'
-
-" Better Java syntax highlighting
+" Better Java syntax
 Plug 'uiiaoo/java-syntax.vim'
+
+" Snippets support
+Plug 'honza/vim-snippets'
 
 call plug#end()
 
 " ===================== Theme =====================
-set background=dark
-let g:tokyonight_style = 'night'
-let g:tokyonight_enable_italic = 1
-let g:tokyonight_transparent_background = 0
-colorscheme tokyonight
+colorscheme onedark
 
 " ===================== Java Syntax Highlighting =====================
-" Enable better Java highlighting
 let g:java_highlight_functions = 1
 let g:java_highlight_generics = 1
-let g:java_highlight_debug = 1
-let g:java_highlight_java_lang_ids = 1
 let g:java_highlight_all = 1
 
-" Custom Java class/type highlighting
-augroup JavaHighlight
-    autocmd!
-    autocmd FileType java syntax match javaCustomClass "\<\([A-Z][a-zA-Z0-9]*\)\>"
-    autocmd FileType java highlight link javaCustomClass Type
-augroup END
-
 " ===================== Airline Configuration =====================
-let g:airline_theme='tokyonight'
+let g:airline_theme='onedark'
 let g:airline_powerline_fonts = 1
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#formatter = 'unique_tail'
-let g:airline#extensions#tabline#show_buffers = 1
-let g:airline#extensions#tabline#show_splits = 0
-let g:airline#extensions#tabline#show_tabs = 1
-let g:airline#extensions#tabline#show_tab_nr = 0
-let g:airline#extensions#tabline#show_tab_type = 0
-let g:airline#extensions#tabline#close_symbol = '×'
-let g:airline#extensions#tabline#show_close_button = 0
-
-" Minimal airline sections
-let g:airline_section_z = airline#section#create(['%3p%%', 'linenr', 'maxlinenr', ' :%3v'])
+let g:airline#extensions#tabline#enabled = 0
+let g:airline#extensions#whitespace#enabled = 0
+let g:airline_section_z = '%3p%% %l:%c'
 let g:airline_skip_empty_sections = 1
 
-" Disable unnecessary extensions for minimal look
-let g:airline#extensions#whitespace#enabled = 0
-let g:airline#extensions#hunks#enabled = 0
-
-" Use minimal symbols
+" Rounded separators
 if !exists('g:airline_symbols')
   let g:airline_symbols = {}
 endif
-let g:airline_symbols.branch = ''
-let g:airline_symbols.readonly = ''
-let g:airline_symbols.linenr = ''
-let g:airline_symbols.maxlinenr = ''
-let g:airline_symbols.dirty = '⚡'
+let g:airline_left_sep = "\ue0b4"
+let g:airline_left_alt_sep = "\ue0b5"
+let g:airline_right_sep = "\ue0b6"
+let g:airline_right_alt_sep = "\ue0b7"
 
-" ===================== NERDTree Configuration (Optional) =====================
-" Toggle NERDTree with Ctrl+n
+" ===================== NERDTree Configuration =====================
 nnoremap <C-n> :NERDTreeToggle<CR>
 
-" Minimal NERDTree UI
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
-let NERDTreeShowHidden = 1
-let NERDTreeIgnore = ['\.git$', '\.DS_Store$', '__pycache__']
-let NERDTreeWinSize = 30
+let NERDTreeShowHidden = 0
+let NERDTreeIgnore = ['\.git$', '\.class$']
+let NERDTreeWinSize = 25
 
-" Close vim if NERDTree is the only window left
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
 
 " ===================== coc.nvim Configuration =====================
 " Use <Enter> for completion
-inoremap <expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
 
 " Use <Tab> for completion and navigation
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
+      \ coc#pum#visible() ? coc#pum#next(1) :
       \ CheckBackspace() ? "\<TAB>" :
       \ coc#refresh()
+
+inoremap <expr> <S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 
 function! CheckBackspace() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-" ===================== Prevent auto-commenting ====================
-set formatoptions-=cro
-autocmd FileType * setlocal formatoptions-=cro
-autocmd BufEnter * setlocal formatoptions-=cro
-augroup FormatOptions
-    autocmd!
-    autocmd BufEnter * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-augroup END
+" GoTo code navigation
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gr <Plug>(coc-references)
 
-" ===================== Additional UI Polish =====================
-" Smooth scrolling behavior
+" Show documentation
+nnoremap <silent> K :call ShowDocumentation()<CR>
+
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
+
+" ===================== Prevent Auto-commenting ====================
+set formatoptions-=cro
+autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+
+" ===================== UI Polish =====================
 set scrolloff=8
 set sidescrolloff=8
-
-" Better search highlighting
-highlight Search guibg=#3d59a1 guifg=#ffffff ctermbg=61 ctermfg=15
-highlight IncSearch guibg=#bb9af7 guifg=#1a1b26 ctermbg=141 ctermfg=234
-
-" Cleaner popup menu
-highlight Pmenu guibg=#1f2335 guifg=#c0caf5 ctermbg=236 ctermfg=251
-highlight PmenuSel guibg=#3d59a1 guifg=#ffffff ctermbg=61 ctermfg=15
-highlight PmenuSbar guibg=#16161e ctermbg=234
-highlight PmenuThumb guibg=#3d59a1 ctermbg=61
-
-" Better split separators
-highlight VertSplit guibg=NONE guifg=#1a1b26 ctermbg=NONE ctermfg=234
-
-" Line number styling
-highlight LineNr guifg=#3b4261 ctermfg=238
-highlight CursorLineNr guifg=#7aa2f7 gui=bold ctermfg=111 cterm=bold
