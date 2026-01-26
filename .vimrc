@@ -89,12 +89,6 @@ Plug 'joshdick/onedark.vim'
 " File explorer
 Plug 'preservim/nerdtree'
 
-" Better Java syntax
-Plug 'uiiaoo/java-syntax.vim'
-
-" Snippets support
-Plug 'honza/vim-snippets'
-
 call plug#end()
 
 " ===================== Theme =====================
