@@ -77,6 +77,10 @@ call plug#begin('~/.vim/plugged')
 " Autocomplete and LSP
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
+" Snippets
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+
 " Auto pairs
 Plug 'jiangmiao/auto-pairs'
 
@@ -127,11 +131,23 @@ let NERDTreeWinSize = 25
 
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
 
+" ===================== UltiSnips Configuration =====================
+" Use Tab for snippet expansion and jumping
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+
+" Edit snippets in vertical split
+let g:UltiSnipsEditSplit="vertical"
+
+" Snippet directories
+let g:UltiSnipsSnippetDirectories=["UltiSnips", "custom-snippets"]
+
 " ===================== coc.nvim Configuration =====================
 " Use <Enter> for completion
 inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
 
-" Use <Tab> for completion and navigation
+" Use <Tab> intelligently: snippets first, then coc completion
 inoremap <silent><expr> <TAB>
       \ coc#pum#visible() ? coc#pum#next(1) :
       \ CheckBackspace() ? "\<TAB>" :
