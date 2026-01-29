@@ -131,27 +131,33 @@ let NERDTreeWinSize = 25
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
 
 " ===================== UltiSnips Configuration =====================
-let g:UltiSnipsExpandTrigger="<nop>"
-let g:UltiSnipsJumpForwardTrigger="<nop>"
-let g:UltiSnipsJumpBackwardTrigger="<nop>"
+" Use Tab for snippet expansion and jumping
+let g:UltiSnipsExpandTrigger="<cr>"
+let g:UltiSnipsJumpForwardTrigger="<cr>"
+let g:UltiSnipsJumpBackwardTrigger="<s-cr>"
+
+" Edit snippets in vertical split
 let g:UltiSnipsEditSplit="vertical"
+
+" Snippet directories
 let g:UltiSnipsSnippetDirectories=["UltiSnips", "custom-snippets"]
 
 " ===================== coc.nvim Configuration =====================
+" Use <Enter> for completion
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
+
+" Use <Tab> intelligently: snippets first, then coc completion
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<TAB>" :
+      \ coc#refresh()
+
+inoremap <expr> <S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+
 function! CheckBackspace() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
-
-" Tab: trigger completion, select next item, or insert tab
-inoremap <silent><expr> <TAB>
-      \ coc#pum#visible() ? coc#pum#confirm() :
-      \ CheckBackspace() ? "\<TAB>" :
-      \ coc#refresh()
-
-" Enter: confirm completion
-inoremap <silent><expr> <CR>
-      \ coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
 
 " GoTo code navigation
 nmap <silent> gd <Plug>(coc-definition)
@@ -175,3 +181,4 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 " ===================== UI Polish =====================
 set scrolloff=8
 set sidescrolloff=8
+
