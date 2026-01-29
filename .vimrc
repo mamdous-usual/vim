@@ -49,27 +49,26 @@ nnoremap <leader>w :w<CR>
 " Clear search highlighting
 nnoremap <leader><space> :nohlsearch<CR>
 
-" Compile & run for Java CP
+" ===================== Compile & Run =====================
 function! CompileRun()
   write
-  let l:classname = expand('%:t:r')
-  execute "!clear && javac % && java " . l:classname
-endfunction
-
-" Compile & run with input file
-function! CompileRunWithInput()
-  write
-  let l:classname = expand('%:t:r')
-  let l:input_file = input("Input file: ")
-  if l:input_file != ''
-    execute "!clear && javac % && java " . l:classname . " < " . l:input_file
-  else
+  let l:ext = expand('%:e')
+  
+  if l:ext == 'java'
+    let l:classname = expand('%:t:r')
     execute "!clear && javac % && java " . l:classname
+  elseif l:ext == 'cpp'
+    let l:output = expand('%:t:r')
+    execute "!clear && g++ % -o " . l:output . " && ./" . l:output
+  elseif l:ext == 'c'
+    let l:output = expand('%:t:r')
+    execute "!clear && gcc % -o " . l:output . " && ./" . l:output
+  elseif l:ext == 'py'
+    execute "!clear && python3 %"
   endif
 endfunction
 
 nnoremap <leader>r :call CompileRun()<CR>
-nnoremap <leader>ri :call CompileRunWithInput()<CR>
 
 " ===================== Plugin Setup =====================
 call plug#begin('~/.vim/plugged')
@@ -132,33 +131,27 @@ let NERDTreeWinSize = 25
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
 
 " ===================== UltiSnips Configuration =====================
-" Use Tab for snippet expansion and jumping
-let g:UltiSnipsExpandTrigger="<cr>"
-let g:UltiSnipsJumpForwardTrigger="<cr>"
-let g:UltiSnipsJumpBackwardTrigger="<s-cr>"
-
-" Edit snippets in vertical split
+let g:UltiSnipsExpandTrigger="<nop>"
+let g:UltiSnipsJumpForwardTrigger="<nop>"
+let g:UltiSnipsJumpBackwardTrigger="<nop>"
 let g:UltiSnipsEditSplit="vertical"
-
-" Snippet directories
 let g:UltiSnipsSnippetDirectories=["UltiSnips", "custom-snippets"]
 
 " ===================== coc.nvim Configuration =====================
-" Use <Enter> for completion
-inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
-
-" Use <Tab> intelligently: snippets first, then coc completion
-inoremap <silent><expr> <TAB>
-      \ coc#pum#visible() ? coc#pum#next(1) :
-      \ CheckBackspace() ? "\<TAB>" :
-      \ coc#refresh()
-
-inoremap <expr> <S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
-
 function! CheckBackspace() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
+
+" Tab: trigger completion, select next item, or insert tab
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#confirm() :
+      \ CheckBackspace() ? "\<TAB>" :
+      \ coc#refresh()
+
+" Enter: confirm completion
+inoremap <silent><expr> <CR>
+      \ coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
 
 " GoTo code navigation
 nmap <silent> gd <Plug>(coc-definition)
