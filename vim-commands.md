@@ -45,7 +45,9 @@
 - `ctrl + r` - redo 
 - `ctrl + u` - undo in insert mode 
 - `ciw` - change in inner word
+- `ci"` - change in " "
 - `diw` - delete in inner word (in the middle of the word delete without going to the first character)
+- `da"` - cut whole text in any position
 - `J` - deletes an empty line (without going insert mode)
 - `P` - inserts an empty line (without going insert mode)
 - `ci)` / `]` / `}` - change inner parenthesis/brackets
