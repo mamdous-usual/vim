@@ -76,10 +76,6 @@ call plug#begin('~/.vim/plugged')
 " Autocomplete and LSP
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
-" Snippets
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-
 " Auto pairs
 Plug 'jiangmiao/auto-pairs'
 
@@ -130,23 +126,11 @@ let NERDTreeWinSize = 25
 
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
 
-" ===================== UltiSnips Configuration =====================
-" Use Tab for snippet expansion and jumping
-let g:UltiSnipsExpandTrigger="<cr>"
-let g:UltiSnipsJumpForwardTrigger="<cr>"
-let g:UltiSnipsJumpBackwardTrigger="<s-cr>"
-
-" Edit snippets in vertical split
-let g:UltiSnipsEditSplit="vertical"
-
-" Snippet directories
-let g:UltiSnipsSnippetDirectories=["UltiSnips", "custom-snippets"]
-
 " ===================== coc.nvim Configuration =====================
 " Use <Enter> for completion
 inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
 
-" Use <Tab> intelligently: snippets first, then coc completion
+" Use <Tab> intelligently for coc completion
 inoremap <silent><expr> <TAB>
       \ coc#pum#visible() ? coc#pum#next(1) :
       \ CheckBackspace() ? "\<TAB>" :
@@ -159,22 +143,7 @@ function! CheckBackspace() abort
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-" GoTo code navigation
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gr <Plug>(coc-references)
-
-" Show documentation
-nnoremap <silent> K :call ShowDocumentation()<CR>
-
-function! ShowDocumentation()
-  if CocAction('hasProvider', 'hover')
-    call CocActionAsync('doHover')
-  else
-    call feedkeys('K', 'in')
-  endif
-endfunction
-
-" ===================== Prevent Auto-commenting ====================
+" ===================== Prevent Auto-commenting =====================
 set formatoptions-=cro
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
