@@ -88,6 +88,9 @@ Plug 'joshdick/onedark.vim'
 " File explorer
 Plug 'preservim/nerdtree'
 
+" Icons
+Plug 'ryanoasis/vim-devicons'
+
 call plug#end()
 
 " ===================== Theme =====================
