@@ -22,6 +22,7 @@ if has("termguicolors")
   set termguicolors
 endif
 let mapleader = " "
+
 " ===================== Shortcuts =====================
 nnoremap <leader>t :term<CR>
 nnoremap <leader>vt :vert term<CR>
@@ -29,7 +30,8 @@ nnoremap <leader>ya :%y+<CR>
 vnoremap <leader>y "+y
 nnoremap <leader>w :w<CR>
 nnoremap <leader><space> :nohlsearch<CR>
-nnoremap <C-n> :NERDTreeToggle<CR>
+nnoremap <leader>e :NERDTreeToggle<CR>
+
 " ===================== Compile & Run =====================
 function! CompileRun()
   write
@@ -48,6 +50,7 @@ function! CompileRun()
   endif
 endfunction
 nnoremap <leader>r :call CompileRun()<CR>
+
 " ===================== Plugins =====================
 call plug#begin('~/.vim/plugged')
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -57,6 +60,7 @@ Plug 'joshdick/onedark.vim'
 Plug 'preservim/nerdtree'
 Plug 'ryanoasis/vim-devicons'
 call plug#end()
+
 " ===================== Theme =====================
 colorscheme onedark
 let g:airline_theme='onedark'
@@ -72,12 +76,14 @@ let g:airline_left_sep = "\ue0b4"
 let g:airline_left_alt_sep = "\ue0b5"
 let g:airline_right_sep = "\ue0b6"
 let g:airline_right_alt_sep = "\ue0b7"
+
 " ===================== NERDTree =====================
 let NERDTreeMinimalUI = 1
 let NERDTreeShowHidden = 0
 let NERDTreeIgnore = ['\.git$', '\.class$']
 let NERDTreeWinSize = 25
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
 " ===================== coc.nvim =====================
 inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
 inoremap <silent><expr> <TAB>
@@ -89,6 +95,13 @@ function! CheckBackspace() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
+
 " ===================== Misc =====================
 set formatoptions-=cro
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+
+" Prevent Vim from sending terminal initialization strings that leak as text
+let &t_TI = ""
+let &t_TE = ""
+" Prevent Vim from querying terminal version (prevents random characters on startup)
+set t_RV=
