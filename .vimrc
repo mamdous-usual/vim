@@ -32,6 +32,16 @@ nnoremap <leader>w :w<CR>
 nnoremap <leader><space> :nohlsearch<CR>
 nnoremap <leader>e :NERDTreeToggle<CR>
 
+" ===================== Comments =====================
+" For Python / Bash / Vimscript style comments (#)
+autocmd FileType python,sh,bash,vim nnoremap <buffer> <C-_> I# <Esc>
+autocmd FileType python,sh,bash,vim vnoremap <buffer> <C-_> :normal I# <CR>
+
+" For C / C++ / Java / JavaScript / Go style comments (//)
+autocmd FileType c,cpp,java,javascript,go nnoremap <buffer> <C-_> I// <Esc>
+autocmd FileType c,cpp,java,javascript,go vnoremap <buffer> <C-_> :normal I// <CR>
+
+
 " ===================== Compile & Run =====================
 function! CompileRun()
   write
